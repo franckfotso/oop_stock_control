@@ -1,0 +1,6 @@
+dev14,Shoe14,45
+dev28,Pant75,12
+dev36,Sock12,32
+dev74,Glasses78,15
+dev85,hat55,26,21
+dev96,Glasses45,15

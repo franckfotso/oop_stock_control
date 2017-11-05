@@ -17,6 +17,7 @@
  */
 package oop.stock.view;
 
+import static com.sun.org.apache.bcel.internal.Repository.instanceOf;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +25,8 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import oop.stock.controller.AbstractController;
 import oop.stock.controller.ProductController;
 import oop.stock.controller.StockController;
@@ -41,9 +44,9 @@ import oop.stock.observer.Observer;
 public class StockGUI extends JFrame implements Observer{
     
     private HashMap<String,AbstractController> controllers;
-    private String products_file = "oop/stock/data/prod-data.txt";
-    private String stocks_file = "oop/stock/data/stock-data.txt";
-    private String prices_file = "oop/stock/data/prices.txt";
+    private String products_file = "src/oop/stock/data/prod-data.txt";
+    private String stocks_file = "src/oop/stock/data/stock-data.txt";
+    private String prices_file = "src/oop/stock/data/prices.txt";
     
     private javax.swing.JButton btn_add;
     private javax.swing.JButton btn_delete;
@@ -84,14 +87,12 @@ public class StockGUI extends JFrame implements Observer{
     
     public void initControllers(){
         // init product controller
-        ProductController prod_controller = new ProductController(null);
-        ProductRecords prod_records = (ProductRecords) prod_controller.read_data(products_file); 
-        prod_controller.setModel(prod_records);
+        ProductController prod_controller = new ProductController(null, this);
+        prod_controller.read_data(products_file);
         
         // init stock controller 
-        StockController stock_controller = new StockController(null);
-        StockRecords stock_records = (StockRecords) stock_controller.read_data(stocks_file);
-        stock_controller.setModel(stock_records);
+        StockController stock_controller = new StockController(null, this);
+        stock_controller.read_data(stocks_file);
         
         this.controllers.put("prod_controller", prod_controller);
         this.controllers.put("prod_controller", stock_controller);
@@ -130,10 +131,10 @@ public class StockGUI extends JFrame implements Observer{
 
         tab_products.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, "Shoe14", "150", "Women shoes", "45", null},
-                {null, "Pant75", "20", "Men pant", "12", null},
-                {null, "Sock12", "45", "winter sock", "32", null},
-                {null, "Glasses78", "25", "summer glasses", "15", null}
+//                {null, "Shoe14", "150", "Women shoes", "45", null},
+//                {null, "Pant75", "20", "Men pant", "12", null},
+//                {null, "Sock12", "45", "winter sock", "32", null},
+//                {null, "Glasses78", "25", "summer glasses", "15", null}
             },
             new String [] {
                 "#", "Code", "Price", "Description", "Stock", "Actions"
@@ -154,6 +155,35 @@ public class StockGUI extends JFrame implements Observer{
                 return canEdit [columnIndex];
             }
         });
+        
+        // customize tab size
+        TableColumn col;
+        for (int i =0; i < tab_products.getColumnCount(); i++)
+        {
+            col = tab_products.getColumnModel().getColumn(i);
+            
+            switch(i)
+            {
+                case 0: // box
+                    col.setPreferredWidth(5);
+                    break;
+                case 1: // code
+                    col.setPreferredWidth(70);
+                    break;
+                case 2: // price
+                    col.setPreferredWidth(25);
+                    break;
+                case 3: // description
+                    col.setPreferredWidth(170);
+                    break;
+                case 4: // stock
+                    col.setPreferredWidth(25);
+                    break;
+                default:
+                    break;
+            }
+        }
+        
         tab_products.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(tab_products);
 
@@ -209,8 +239,30 @@ public class StockGUI extends JFrame implements Observer{
 
     @Override
     public void update(Observable observ) {
-        System.out.println("StockGUI >> update from Observable");
-        
+                
+        if (observ.getClass().isInstance(new ProductRecords()))
+        {
+            System.out.println("StockGUI >> update changes from ProductRecords");            
+            ProductRecords prod_records = (ProductRecords) observ;
+            HashMap<String, Product> products = prod_records.getProducts();
+            
+            DefaultTableModel model = (DefaultTableModel) this.tab_products.getModel();
+            for (Map.Entry<String, Product> entry: products.entrySet())
+            {
+                String code = entry.getKey();
+                Product product = entry.getValue();
+                model.addRow(new Object[] {product.getCode(), product.getPrice(),
+                                           product.getDescription(), 0});
+            }        
+        }
+        else if (observ.getClass().isInstance(new StockRecords()))
+        {
+            System.out.println("StockGUI >> update changes from StockRecords");
+            StockRecords stock_records = (StockRecords) observ;
+        }
+        else{
+            System.out.println("StockGUI >> unknown model");
+        }        
     }
     
 }

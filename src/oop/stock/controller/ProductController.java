@@ -17,16 +17,33 @@
  */
 package oop.stock.controller;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import oop.stock.model.AbstractModel;
+import oop.stock.model.Product;
+import oop.stock.model.ProductRecords;
+import oop.stock.view.StockGUI;
 
 /**
  *
  * @author romuald.fotso
  */
 public class ProductController extends AbstractController {
+    private StockGUI stockGUI;
     
     public ProductController(AbstractModel model) {
         super(model);
+    }
+    
+    public ProductController(AbstractModel model, StockGUI stockGUI) {
+        super(model);
+        this.stockGUI = stockGUI;
     }
     
     @Override
@@ -35,8 +52,38 @@ public class ProductController extends AbstractController {
     }
 
     @Override
-    public AbstractModel read_data(String pathname) {
-        return null;
+    public void read_data(String pathname) {
+        File file = new File(pathname);
+        System.out.println("ProductController > read_data: "+file.getAbsolutePath());        
+        FileReader fr = null;
+        HashMap<String, Product> products = new HashMap<String, Product>();
+        
+        try{
+            fr = new FileReader(file);
+            BufferedReader br = new BufferedReader(fr);
+                    
+            String line;
+            while((line = br.readLine()) != null)
+            {
+                //System.out.println("ProductController > line: "+line);                
+                String[] data = line.split(",");
+                Product product = new Product(data[0], Float.parseFloat(data[1]), 
+                                        data[2]);
+                products.put(product.getCode(), product);
+            }
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        
+        ProductRecords prod_records = new ProductRecords(products);
+        prod_records.addObserver(stockGUI); // link Model -> View
+        prod_records.notifyObservers(); // update stockGUI
+        
+        this.model = prod_records;
+        System.out.println("ProductController > new model set: ProductRecords");
     }
 
     @Override

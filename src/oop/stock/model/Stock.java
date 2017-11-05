@@ -17,23 +17,35 @@
  */
 package oop.stock.model;
 
+import java.util.Date;
+
 /**
  *
  * @author romuald.fotso
  */
 public class Stock {
     
+    private String delivery;
     private String prod_code;
-    private String date;
+    private Date date;
     private int quantity;
 
     public Stock() {
     }
 
-    public Stock(String prod_code, String date, int quantity) {
+    public Stock(String delivery, String prod_code, Date date, int quantity) {
+        this.delivery = delivery;
         this.prod_code = prod_code;
         this.date = date;
         this.quantity = quantity;
+    }
+
+    public String getDelivery() {
+        return delivery;
+    }
+
+    public void setDelivery(String delivery) {
+        this.delivery = delivery;
     }
 
     public String getProd_code() {
@@ -44,11 +56,11 @@ public class Stock {
         this.prod_code = prod_code;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -59,5 +71,5 @@ public class Stock {
     public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
-    
+        
 }

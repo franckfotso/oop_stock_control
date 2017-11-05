@@ -41,7 +41,7 @@ public abstract class AbstractController {
        
     abstract public int calculate();
     
-    abstract public AbstractModel read_data(String pathname);
+    abstract public void read_data(String pathname) throws Exception;
     
     abstract public void save_data(String pathname);
 }

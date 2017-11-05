@@ -23,6 +23,8 @@ package oop.stock.observer;
  */
 public interface Observable {
     
+    public String cls_type = "";
+    
     public void addObserver(Observer obs);
 	
     public void removeObservers();

@@ -18,7 +18,6 @@
 package oop.stock.model;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 
 /**
  *
@@ -27,6 +26,9 @@ import java.util.Hashtable;
 public class ProductRecords  extends AbstractModel{
     
     private HashMap<String, Product> products;
+
+    public ProductRecords() {
+    }   
 
     public ProductRecords(HashMap<String, Product> products) {
         this.products = products;
