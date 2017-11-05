@@ -24,7 +24,7 @@ import oop.stock.view.StockGUI;
 
 /**
  *
- * @author romuald.fotso 09
+ * @author romuald.fotso >>
  */
 public class StockMain {
     
