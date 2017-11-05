@@ -2,5 +2,5 @@ Shoe14,150,Women shoes,45
 Pant75,20,Men pant,12
 Sock12,45,winter sock,32
 Glasses78,25,summer glasses,15
-hat55,26, western hat,21
+hat55,26,western hat,21
 Glasses45,75,autumn glasses,15

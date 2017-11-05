@@ -27,6 +27,7 @@ import oop.stock.model.AbstractModel;
 import oop.stock.model.Product;
 import oop.stock.model.ProductRecords;
 import oop.stock.model.Stock;
+import oop.stock.model.StockRecords;
 import oop.stock.view.StockGUI;
 
 /**
@@ -52,7 +53,7 @@ public class StockController extends AbstractController{
     }
 
     @Override
-    public void read_data(String pathname) throws Exception{
+    public void read_data(String pathname){
         File file = new File(pathname);
         System.out.println("StockController > read_data: "+file.getAbsolutePath());
         FileReader fr = null;
@@ -103,13 +104,16 @@ public class StockController extends AbstractController{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         
-        StockRecords prod_records = new StockRecords(stocks);
-        prod_records.addObserver(stockGUI); // link Model -> View
-        prod_records.notifyObservers(); // update stockGUI
+        StockRecords stock_records = new StockRecords(stocks);
+        stock_records.addObserver(stockGUI); // link Model -> View        
         
-        this.model = prod_records;
-        System.out.println("ProductController > new model set: ProductRecords");
+        this.model = stock_records;
+        System.out.println("StockController > new model set: stock_records");
+        stock_records.notifyObservers(); // update stockGUI
     
     }
 

@@ -21,11 +21,16 @@ import static com.sun.org.apache.bcel.internal.Repository.instanceOf;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import oop.stock.controller.AbstractController;
 import oop.stock.controller.ProductController;
@@ -52,11 +57,14 @@ public class StockGUI extends JFrame implements Observer{
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_search;
+    private javax.swing.JButton btn_reset;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator sep_H;
     private javax.swing.JSeparator sep_V;
     private javax.swing.JTable tab_products;
     private javax.swing.JTextField tf_search;
+    
+    private String[] comboData = {"Select", "View", "Add stock", "Buy"};
 
     public StockGUI(HashMap<String, AbstractController> controllers) {
         this.controllers = controllers;        
@@ -86,6 +94,7 @@ public class StockGUI extends JFrame implements Observer{
     }   
     
     public void initControllers(){
+        
         // init product controller
         ProductController prod_controller = new ProductController(null, this);
         prod_controller.read_data(products_file);
@@ -104,11 +113,12 @@ public class StockGUI extends JFrame implements Observer{
         btn_delete = new javax.swing.JButton();
         tf_search = new javax.swing.JTextField();
         btn_search = new javax.swing.JButton();
+        btn_reset = new javax.swing.JButton();
+        
         sep_V = new javax.swing.JSeparator();
         sep_H = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tab_products = new javax.swing.JTable();
-        
+        tab_products = new javax.swing.JTable();        
 
         btn_add.setText("Add");
         btn_add.setToolTipText("Add a product");
@@ -126,6 +136,10 @@ public class StockGUI extends JFrame implements Observer{
 
         btn_search.setText("Search");
         btn_search.setToolTipText("Search a product");
+        
+        btn_reset.setText("Reset");
+        btn_reset.setToolTipText("");
+        btn_reset.setEnabled(false);
 
         sep_V.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -141,10 +155,10 @@ public class StockGUI extends JFrame implements Observer{
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, javax.swing.JComboBox.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false
+                true, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -184,8 +198,16 @@ public class StockGUI extends JFrame implements Observer{
             }
         }
         
+//        TableColumn tab_col = tab_products.getColumnModel().getColumn(5);
+//        tab_col.setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
+        
+        //tab_products.getColumn("Actions").setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
+                
         tab_products.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(tab_products);
+
+        btn_search.setText("Search");
+        btn_search.setToolTipText("Search a product");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -201,12 +223,14 @@ public class StockGUI extends JFrame implements Observer{
                         .addComponent(btn_edit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_delete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addComponent(sep_V, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_search))
+                        .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_search)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_reset))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -220,6 +244,7 @@ public class StockGUI extends JFrame implements Observer{
                         .addComponent(btn_edit)
                         .addComponent(btn_delete)
                         .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_reset)
                         .addComponent(btn_search))
                     .addComponent(sep_V, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -251,14 +276,53 @@ public class StockGUI extends JFrame implements Observer{
             {
                 String code = entry.getKey();
                 Product product = entry.getValue();
-                model.addRow(new Object[] {product.getCode(), product.getPrice(),
-                                           product.getDescription(), 0});
-            }        
+                model.addRow(new Object[] {null, product.getCode(), product.getPrice(),
+                                           product.getDescription(), 0, new JComboBox(comboData)});
+            }
+            
+            tab_products.getColumn("Actions").setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
+            tab_products.setDefaultRenderer(JComboBox.class, new TableComponent());
+            //this.tab_products.setModel(model);
         }
         else if (observ.getClass().isInstance(new StockRecords()))
         {
             System.out.println("StockGUI >> update changes from StockRecords");
             StockRecords stock_records = (StockRecords) observ;
+            HashMap<String, HashMap<String, Stock>> stocks = 
+                    stock_records.getStocks();
+            
+            int rows = this.tab_products.getRowCount();
+            DefaultTableModel model = (DefaultTableModel) this.tab_products.getModel();
+            for (Map.Entry<String, HashMap<String, Stock>> entry: stocks.entrySet())
+            {
+                int prod_qty = 0;
+                String prod_code = entry.getKey();
+                HashMap<String, Stock> stock_by_deliv = entry.getValue();
+                
+                for (Map.Entry<String, Stock> sub_entry: stock_by_deliv.entrySet())
+                {
+                    String delivery = sub_entry.getKey();
+                    Stock stock = sub_entry.getValue();
+                    prod_qty += stock.getQuantity();
+                }
+                
+                int target_row = -1;
+                for (int i=0; i < rows; i++)
+                {
+                    if (this.tab_products.getValueAt(i, 1).equals(prod_code))
+                    {
+                        target_row = i;
+                        break;
+                    }                        
+                }
+                
+                if (target_row != -1)
+                {
+                    this.tab_products.setValueAt(prod_qty, target_row, 4);
+                }
+                else System.out.println("StockGUI >> missing prod_code from stock");                
+            }
+            //this.tab_products.setModel(model);
         }
         else{
             System.out.println("StockGUI >> unknown model");

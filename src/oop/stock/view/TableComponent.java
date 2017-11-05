@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017 romuald.fotso
+ * Copyright (C) 2017 T7144078
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -15,33 +15,29 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
-package oop.stock.controller;
+package oop.stock.view;
 
-import oop.stock.model.AbstractModel;
+import java.awt.Component;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
 
 /**
  *
- * @author romuald.fotso
+ * @author T7144078
  */
-public abstract class AbstractController {
+public class TableComponent extends DefaultTableCellRenderer{
     
-    protected AbstractModel model;
-
-    public AbstractController(AbstractModel model) {
-        this.model = model;
-    }  
-
-    public AbstractModel getModel() {
-        return model;
+    public Component getTableCellRendererComponent(JTable table,
+    Object value, boolean isSelected, boolean hasFocus, int row, int
+    column) 
+    {
+        if (value instanceof JButton)
+            return (JButton) value;
+        else if(value instanceof JComboBox)
+            return (JComboBox) value;
+        else
+            return this;
     }
-
-    public void setModel(AbstractModel model) {
-        this.model = model;
-    }
-       
-    abstract public int calculate();
-    
-    abstract public void read_data(String pathname);
-    
-    abstract public void save_data(String pathname);
 }

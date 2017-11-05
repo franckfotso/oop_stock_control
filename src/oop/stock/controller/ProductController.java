@@ -79,11 +79,11 @@ public class ProductController extends AbstractController {
         }
         
         ProductRecords prod_records = new ProductRecords(products);
-        prod_records.addObserver(stockGUI); // link Model -> View
-        prod_records.notifyObservers(); // update stockGUI
+        prod_records.addObserver(stockGUI); // link Model -> View        
         
         this.model = prod_records;
-        System.out.println("ProductController > new model set: ProductRecords");
+        System.out.println("ProductController > new model set: prod_records");
+        prod_records.notifyObservers(); // update stockGUI
     }
 
     @Override

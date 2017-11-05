@@ -38,12 +38,14 @@
                       <Component id="btn_edit" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="btn_delete" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="45" max="32767" attributes="0"/>
+                      <EmptySpace pref="49" max="32767" attributes="0"/>
                       <Component id="sep_V" min="-2" pref="13" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                      <Component id="tf_search" min="-2" pref="205" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
+                      <Component id="tf_search" min="-2" pref="159" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_search" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="btn_reset" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -61,6 +63,7 @@
                       <Component id="btn_edit" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btn_delete" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="tf_search" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="btn_reset" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="btn_search" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="sep_V" alignment="0" min="-2" pref="23" max="-2" attributes="0"/>
@@ -105,10 +108,11 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="btn_search">
+    <Component class="javax.swing.JButton" name="btn_reset">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Search"/>
-        <Property name="toolTipText" type="java.lang.String" value="Search a product"/>
+        <Property name="text" type="java.lang.String" value="Reset"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="enabled" type="boolean" value="false"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JSeparator" name="sep_V">
@@ -164,5 +168,11 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JButton" name="btn_search">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Search"/>
+        <Property name="toolTipText" type="java.lang.String" value="Search a product"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

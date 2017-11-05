@@ -43,11 +43,12 @@ public class _StockGUI extends javax.swing.JFrame {
         btn_edit = new javax.swing.JButton();
         btn_delete = new javax.swing.JButton();
         tf_search = new javax.swing.JTextField();
-        btn_search = new javax.swing.JButton();
+        btn_reset = new javax.swing.JButton();
         sep_V = new javax.swing.JSeparator();
         sep_H = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         tab_products = new javax.swing.JTable();
+        btn_search = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("OOP - Stock Control");
@@ -65,10 +66,11 @@ public class _StockGUI extends javax.swing.JFrame {
         btn_delete.setEnabled(false);
 
         tf_search.setToolTipText("Enter a keyword for search...");
-        tf_search.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tf_search.setBorder(new javax.swing.border.SoftBevelBorder(0));
 
-        btn_search.setText("Search");
-        btn_search.setToolTipText("Search a product");
+        btn_reset.setText("Reset");
+        btn_reset.setToolTipText("");
+        btn_reset.setEnabled(false);
 
         sep_V.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
@@ -101,6 +103,9 @@ public class _StockGUI extends javax.swing.JFrame {
         tab_products.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(tab_products);
 
+        btn_search.setText("Search");
+        btn_search.setToolTipText("Search a product");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -115,12 +120,14 @@ public class _StockGUI extends javax.swing.JFrame {
                         .addComponent(btn_edit)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btn_delete)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                         .addComponent(sep_V, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(35, 35, 35)
-                        .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_search))
+                        .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_search)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_reset))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -134,6 +141,7 @@ public class _StockGUI extends javax.swing.JFrame {
                         .addComponent(btn_edit)
                         .addComponent(btn_delete)
                         .addComponent(tf_search, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_reset)
                         .addComponent(btn_search))
                     .addComponent(sep_V, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -188,6 +196,7 @@ public class _StockGUI extends javax.swing.JFrame {
     private javax.swing.JButton btn_add;
     private javax.swing.JButton btn_delete;
     private javax.swing.JButton btn_edit;
+    private javax.swing.JButton btn_reset;
     private javax.swing.JButton btn_search;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator sep_H;
