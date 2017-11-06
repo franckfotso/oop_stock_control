@@ -24,6 +24,7 @@ import java.util.Map;
 import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -155,7 +156,9 @@ public class StockGUI extends JFrame implements Observer{
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, javax.swing.JComboBox.class
+                java.lang.Boolean.class, java.lang.Object.class, 
+                java.lang.Object.class, java.lang.Object.class, 
+                java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 true, false, false, false, false, true
@@ -276,13 +279,13 @@ public class StockGUI extends JFrame implements Observer{
             {
                 String code = entry.getKey();
                 Product product = entry.getValue();
-                model.addRow(new Object[] {null, product.getCode(), product.getPrice(),
-                                           product.getDescription(), 0, new JComboBox(comboData)});
-            }
+                model.addRow(new Object[] {new Boolean(false), product.getCode(), product.getPrice(),
+                                           product.getDescription(), 0, comboData[0]});
+            }            
             
             tab_products.getColumn("Actions").setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
-            tab_products.setDefaultRenderer(JComboBox.class, new TableComponent());
-            //this.tab_products.setModel(model);
+            tab_products.setDefaultRenderer(JComponent.class, new TableComponent());
+            
         }
         else if (observ.getClass().isInstance(new StockRecords()))
         {
@@ -322,7 +325,6 @@ public class StockGUI extends JFrame implements Observer{
                 }
                 else System.out.println("StockGUI >> missing prod_code from stock");                
             }
-            //this.tab_products.setModel(model);
         }
         else{
             System.out.println("StockGUI >> unknown model");
