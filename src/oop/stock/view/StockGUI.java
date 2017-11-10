@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -36,6 +37,8 @@ import javax.swing.table.TableColumn;
 import oop.stock.controller.AbstractController;
 import oop.stock.controller.ProductController;
 import oop.stock.controller.StockController;
+import oop.stock.event.AbstractHandleEvent;
+import oop.stock.event.MainHE;
 import oop.stock.model.Product;
 import oop.stock.model.ProductRecords;
 import oop.stock.model.Stock;
@@ -66,6 +69,8 @@ public class StockGUI extends JFrame implements Observer{
     private javax.swing.JTextField tf_search;
     
     private String[] comboData = {"Select", "View", "Add stock", "Buy"};
+    private AbstractHandleEvent mainHE;
+    private DefaultTableModel init_tab_model;
 
     public StockGUI(HashMap<String, AbstractController> controllers) {
         this.controllers = controllers;        
@@ -78,7 +83,7 @@ public class StockGUI extends JFrame implements Observer{
         
         // configure GUI
         this.initComponents();		
-	this.initEvents();
+	
         // Use Look & Feel System
 	try {
 	    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -90,10 +95,68 @@ public class StockGUI extends JFrame implements Observer{
         catch (IllegalAccessException e) {}
         
         this.initControllers();
+        this.initEvents();
+        
         this.pack();
 	this.setVisible(true);
-    }   
-    
+    }
+
+    public HashMap<String, AbstractController> getControllers() {
+        return controllers;
+    }
+
+    public void setControllers(HashMap<String, AbstractController> controllers) {
+        this.controllers = controllers;
+    }
+
+    public JButton getBtn_delete() {
+        return btn_delete;
+    }
+
+    public void setBtn_delete(JButton btn_delete) {
+        this.btn_delete = btn_delete;
+    }
+
+    public JButton getBtn_edit() {
+        return btn_edit;
+    }
+
+    public void setBtn_edit(JButton btn_edit) {
+        this.btn_edit = btn_edit;
+    }
+
+    public JButton getBtn_search() {
+        return btn_search;
+    }
+
+    public void setBtn_search(JButton btn_search) {
+        this.btn_search = btn_search;
+    }
+
+    public JButton getBtn_reset() {
+        return btn_reset;
+    }
+
+    public void setBtn_reset(JButton btn_reset) {
+        this.btn_reset = btn_reset;
+    }
+
+    public JTable getTab_products() {
+        return tab_products;
+    }
+
+    public void setTab_products(JTable tab_products) {
+        this.tab_products = tab_products;
+    }
+
+    public JButton getBtn_add() {
+        return btn_add;
+    }
+
+    public void setBtn_add(JButton btn_add) {
+        this.btn_add = btn_add;
+    }
+        
     public void initControllers(){
         
         // init product controller
@@ -105,7 +168,7 @@ public class StockGUI extends JFrame implements Observer{
         stock_controller.read_data(stocks_file);
         
         this.controllers.put("prod_controller", prod_controller);
-        this.controllers.put("prod_controller", stock_controller);
+        this.controllers.put("stock_controller", stock_controller);
     }
     
     public void initComponents(){
@@ -143,14 +206,9 @@ public class StockGUI extends JFrame implements Observer{
         btn_reset.setEnabled(false);
 
         sep_V.setOrientation(javax.swing.SwingConstants.VERTICAL);
-
-        tab_products.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-//                {null, "Shoe14", "150", "Women shoes", "45", null},
-//                {null, "Pant75", "20", "Men pant", "12", null},
-//                {null, "Sock12", "45", "winter sock", "32", null},
-//                {null, "Glasses78", "25", "summer glasses", "15", null}
-            },
+        
+        init_tab_model = new javax.swing.table.DefaultTableModel(
+            new Object [][] { },
             new String [] {
                 "#", "Code", "Price", "Description", "Stock", "Actions"
             }
@@ -171,7 +229,9 @@ public class StockGUI extends JFrame implements Observer{
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
-        });
+        };
+
+        tab_products.setModel(init_tab_model);
         
         // customize tab size
         TableColumn col;
@@ -260,9 +320,9 @@ public class StockGUI extends JFrame implements Observer{
         getAccessibleContext().setAccessibleDescription("");
         //pack();
     }
-    
-    public void initEvents(){
         
+    public void initEvents(){
+        this.mainHE = new MainHE(this);
     }
 
     @Override
@@ -275,6 +335,12 @@ public class StockGUI extends JFrame implements Observer{
             HashMap<String, Product> products = prod_records.getProducts();
             
             DefaultTableModel model = (DefaultTableModel) this.tab_products.getModel();
+            int rows = this.tab_products.getRowCount();
+            //System.out.println("StockGUI >> rows: "+rows); 
+            for (int i=rows-1; i>=0; i--){
+                model.removeRow(i);
+            }
+            
             for (Map.Entry<String, Product> entry: products.entrySet())
             {
                 String code = entry.getKey();

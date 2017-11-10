@@ -3,14 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/model/ProductRecords.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/view/StockGUI.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/model/Stock.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/model/StockRecords.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/main/StockMain.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/controller/ProductController.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/controller/StockController.java</file>
-            <file>file:/D:/1-Envy/OneDrive/Documents/Teesside/Workspace/NetBeans/oop_stock_control/src/oop/stock/model/Product.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/controller/AbstractController.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/model/StockRecords.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/main/StockMain.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/view/_StockGUI.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/controller/StockController.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/view/TableComponent.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/view/StockGUI.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/model/ProductRecords.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/data/stock-data.txt</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/model/Stock.java</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/data/prod-data.txt</file>
+            <file>file:/U:/T7144078/Git/oop_stock_control/src/oop/stock/controller/ProductController.java</file>
         </group>
     </open-files>
 </project-private>

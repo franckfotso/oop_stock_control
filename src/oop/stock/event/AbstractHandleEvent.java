@@ -17,10 +17,27 @@
  */
 package oop.stock.event;
 
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import oop.stock.view.StockGUI;
+
 /**
  *
  * @author romuald.fotso
  */
 public class AbstractHandleEvent {
     
+    protected StockGUI stockGUI;
+    protected JDialog dialog;
+
+    public AbstractHandleEvent() {
+    }
+    
+    public AbstractHandleEvent(StockGUI stockGUI) {
+        this.stockGUI = stockGUI;
+    }
+    
+    public AbstractHandleEvent(JDialog dialog) {
+        this.dialog = dialog;
+    }
 }
