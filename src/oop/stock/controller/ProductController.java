@@ -18,13 +18,14 @@
 package oop.stock.controller;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import oop.stock.model.AbstractModel;
 import oop.stock.model.Product;
 import oop.stock.model.ProductRecords;
@@ -48,7 +49,7 @@ public class ProductController extends AbstractController {
     
     @Override
     public int calculate() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -88,7 +89,34 @@ public class ProductController extends AbstractController {
 
     @Override
     public void save_data(String pathname) {
+        File file = new File(pathname);
+        System.out.println("ProductController > save_data: "+file.getAbsolutePath());
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        HashMap<String,Product> products = ((ProductRecords)(this.model)).getProducts();
+        //System.out.println("ProductController > len(products): "+products.size());
         
+        try{
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            
+            for (Map.Entry<String, Product> entry: products.entrySet())
+            {
+                String code = entry.getKey();
+                Product product = entry.getValue();
+                
+                String line = code+","+product.getPrice()+","+product.getDescription()+"\n";
+                bw.write(line);
+            }
+            
+            bw.close();
+            fw.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
     
 }

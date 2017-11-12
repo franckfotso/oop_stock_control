@@ -27,24 +27,24 @@ import oop.stock.observer.Observer;
  */
 public abstract class AbstractModel implements Observable{
     
-    private  ArrayList<Observer> l_observers = new ArrayList<Observer>();
+    private  ArrayList<Observer> observers = new ArrayList<Observer>();
     
     @Override
     public void addObserver(Observer obs)
     {
-        this.l_observers.add(obs);
+        this.observers.add(obs);
     }
 	
     @Override
     public void removeObservers()
     {
-        this.l_observers = new ArrayList<Observer>();
+        this.observers = new ArrayList<Observer>();
     }
 
     @Override
     public void notifyObservers()
     {
-        for(Observer obs : this.l_observers)
+        for(Observer obs : this.observers)
             obs.update(this);
     }
     

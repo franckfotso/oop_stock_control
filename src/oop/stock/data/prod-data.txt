@@ -1,6 +1,8 @@
-Shoe14,150,Women shoes,45
-Pant75,20,Men pant,12
-Sock12,45,winter sock,32
-Glasses78,25,summer glasses,15
-hat55,26,western hat,21
-Glasses45,75,autumn glasses,15
+Shoe14,150.0,Women shoes
+pant78,100.0,pant for sport
+Sock12,45.0,winter sock
+Pant75,35.0,Men pant
+Glasses78,25.0,summer glasses
+hat55,26.0,western hat
+Glasses45,75.0,autumn glasses
+pant85,250.0,sexy pant

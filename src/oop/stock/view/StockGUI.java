@@ -17,7 +17,6 @@
  */
 package oop.stock.view;
 
-import static com.sun.org.apache.bcel.internal.Repository.instanceOf;
 import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,14 +24,14 @@ import javax.swing.DefaultCellEditor;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableColumn;
 import oop.stock.controller.AbstractController;
 import oop.stock.controller.ProductController;
@@ -52,10 +51,11 @@ import oop.stock.observer.Observer;
  */
 public class StockGUI extends JFrame implements Observer{
     
-    private HashMap<String,AbstractController> controllers;
-    private String products_file = "src/oop/stock/data/prod-data.txt";
-    private String stocks_file = "src/oop/stock/data/stock-data.txt";
-    private String prices_file = "src/oop/stock/data/prices.txt";
+    public static String PRODUCTS_FILE = "src/oop/stock/data/prod-data.txt";
+    public static String STOCKS_FILE = "src/oop/stock/data/stock-data.txt";
+    public static String PRICES_FILE = "src/oop/stock/data/prices.txt";
+    
+    private HashMap<String,AbstractController> controllers;   
     
     private javax.swing.JButton btn_add;
     private javax.swing.JButton btn_delete;
@@ -71,6 +71,7 @@ public class StockGUI extends JFrame implements Observer{
     private String[] comboData = {"Select", "View", "Add stock", "Buy"};
     private AbstractHandleEvent mainHE;
     private DefaultTableModel init_tab_model;
+    private JDialog dialog;
 
     public StockGUI(HashMap<String, AbstractController> controllers) {
         this.controllers = controllers;        
@@ -95,10 +96,16 @@ public class StockGUI extends JFrame implements Observer{
         catch (IllegalAccessException e) {}
         
         this.initControllers();
-        this.initEvents();
-        
-        this.pack();
+        this.initEvents();        
 	this.setVisible(true);
+    }
+
+    public JDialog getDialog() {
+        return dialog;
+    }
+
+    public void setDialog(JDialog dialog) {
+        this.dialog = dialog;
     }
 
     public HashMap<String, AbstractController> getControllers() {
@@ -156,16 +163,32 @@ public class StockGUI extends JFrame implements Observer{
     public void setBtn_add(JButton btn_add) {
         this.btn_add = btn_add;
     }
+
+    public JTextField getTf_search() {
+        return tf_search;
+    }
+
+    public void setTf_search(JTextField tf_search) {
+        this.tf_search = tf_search;
+    }
+
+    public String[] getComboData() {
+        return comboData;
+    }
+
+    public void setComboData(String[] comboData) {
+        this.comboData = comboData;
+    }
         
     public void initControllers(){
         
         // init product controller
         ProductController prod_controller = new ProductController(null, this);
-        prod_controller.read_data(products_file);
+        prod_controller.read_data(PRODUCTS_FILE);
         
         // init stock controller 
         StockController stock_controller = new StockController(null, this);
-        stock_controller.read_data(stocks_file);
+        stock_controller.read_data(STOCKS_FILE);
         
         this.controllers.put("prod_controller", prod_controller);
         this.controllers.put("stock_controller", stock_controller);
@@ -237,8 +260,7 @@ public class StockGUI extends JFrame implements Observer{
         TableColumn col;
         for (int i =0; i < tab_products.getColumnCount(); i++)
         {
-            col = tab_products.getColumnModel().getColumn(i);
-            
+            col = tab_products.getColumnModel().getColumn(i);            
             switch(i)
             {
                 case 0: // box
@@ -260,12 +282,7 @@ public class StockGUI extends JFrame implements Observer{
                     break;
             }
         }
-        
-//        TableColumn tab_col = tab_products.getColumnModel().getColumn(5);
-//        tab_col.setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
-        
-        //tab_products.getColumn("Actions").setCellEditor(new DefaultCellEditor(new JComboBox(comboData)));
-                
+                        
         tab_products.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(tab_products);
 
@@ -318,7 +335,7 @@ public class StockGUI extends JFrame implements Observer{
         );
 
         getAccessibleContext().setAccessibleDescription("");
-        //pack();
+        pack();
     }
         
     public void initEvents(){
@@ -337,9 +354,8 @@ public class StockGUI extends JFrame implements Observer{
             DefaultTableModel model = (DefaultTableModel) this.tab_products.getModel();
             int rows = this.tab_products.getRowCount();
             //System.out.println("StockGUI >> rows: "+rows); 
-            for (int i=rows-1; i>=0; i--){
+            for (int i=rows-1; i>=0; i--)
                 model.removeRow(i);
-            }
             
             for (Map.Entry<String, Product> entry: products.entrySet())
             {

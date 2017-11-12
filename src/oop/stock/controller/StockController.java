@@ -18,11 +18,14 @@
 package oop.stock.controller;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 import oop.stock.model.AbstractModel;
 import oop.stock.model.Product;
 import oop.stock.model.ProductRecords;
@@ -71,7 +74,7 @@ public class StockController extends AbstractController{
                 String[] data = line.split(",");
                 String delivery = data[0];
                 String prod_code = data[1];
-                int quanty = Integer.parseInt(data[2]);
+                int quantity = Integer.parseInt(data[2]);
                 
                 if (stocks.containsKey(prod_code))
                 {
@@ -82,7 +85,7 @@ public class StockController extends AbstractController{
                         throw new Exception("[ERROR] duplicate stock found");
                     }
                     else{
-                        Stock stock = new Stock(delivery, prod_code, null, quanty);
+                        Stock stock = new Stock(delivery, prod_code, null, quantity);
                         stock_by_deliv.put(delivery, stock);
                     }
                     stocks.put(prod_code, stock_by_deliv);                    
@@ -92,7 +95,7 @@ public class StockController extends AbstractController{
                     HashMap<String, Stock> stock_by_deliv = 
                             new HashMap<String, Stock>();
                     
-                    Stock stock = new Stock(delivery, prod_code, null, quanty);
+                    Stock stock = new Stock(delivery, prod_code, null, quantity);
                         stock_by_deliv.put(delivery, stock);
                         
                     stocks.put(prod_code, stock_by_deliv);
@@ -119,7 +122,42 @@ public class StockController extends AbstractController{
 
     @Override
     public void save_data(String pathname) {
-        
+        File file = new File(pathname);
+        System.out.println("StockController > save_data: "+file.getAbsolutePath());
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        HashMap<String, HashMap<String, Stock>> stocks = ((StockRecords)(this.model)).getStocks();
+                
+        try{
+            fw = new FileWriter(file);
+            bw = new BufferedWriter(fw);
+            
+            for (Map.Entry<String, HashMap<String, Stock>> entry: stocks.entrySet())
+            {
+                String prod_code = entry.getKey();
+                HashMap<String, Stock> stock_by_deliv = entry.getValue();
+                
+                for (Map.Entry<String, Stock> sub_entry: stock_by_deliv.entrySet())
+                {
+                    String delivery = sub_entry.getKey();
+                    Stock stock = sub_entry.getValue();
+                    
+                    String line = delivery+","+prod_code+","+stock.getQuantity()+"\n";
+                    bw.write(line);
+                }
+            }
+            
+            bw.close();
+            fw.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
     
 }
