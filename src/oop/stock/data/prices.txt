@@ -1,0 +1,8 @@
+Shoe14,150.0
+pant78,100.0
+shoe14,230.0
+Sock12,45.0
+Pant75,75.0
+Glasses78,25.0
+hat55,26.0
+Glasses45,75.0

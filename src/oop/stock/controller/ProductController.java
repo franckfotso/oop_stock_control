@@ -57,20 +57,42 @@ public class ProductController extends AbstractController {
         File file = new File(pathname);
         System.out.println("ProductController > read_data: "+file.getAbsolutePath());        
         FileReader fr = null;
+        BufferedReader br = null;
         HashMap<String, Product> products = new HashMap<String, Product>();
         
         try{
             fr = new FileReader(file);
-            BufferedReader br = new BufferedReader(fr);
+            br = new BufferedReader(fr);
                     
             String line;
             while((line = br.readLine()) != null)
             {
                 //System.out.println("ProductController > line: "+line);                
                 String[] data = line.split(",");
-                Product product = new Product(data[0], Float.parseFloat(data[1]), 
-                                        data[2]);
+//                Product product = new Product(data[0], Float.parseFloat(data[1]), 
+//                                        data[2]);
+                Product product = new Product(data[0], 0, data[1]);
                 products.put(product.getCode(), product);
+            }
+            
+            // read prices
+            fr = new FileReader(new File(this.stockGUI.PRICES_FILE));
+            br = new BufferedReader(fr);
+            
+            line = "";
+            while((line = br.readLine()) != null)
+            {
+                String[] data = line.split(",");
+                String prod_code = data[0];
+                
+                if(products.containsKey(prod_code))
+                {
+                    Product prod = products.get(prod_code);
+                    prod.setPrice(Float.parseFloat(data[1]));
+                }
+                else 
+                    System.out.println("ProductController > "
+                        + "unable to add price, prod_code: "+prod_code);
             }
         }
         catch (FileNotFoundException e) {
@@ -105,10 +127,25 @@ public class ProductController extends AbstractController {
                 String code = entry.getKey();
                 Product product = entry.getValue();
                 
-                String line = code+","+product.getPrice()+","+product.getDescription()+"\n";
+                //String line = code+","+product.getPrice()+","+product.getDescription()+"\n";
+                String line = code+","+product.getDescription()+"\n";
                 bw.write(line);
-            }
+            }            
+            bw.close();
+            fw.close();
             
+            // write prices
+            fw = new FileWriter(new File(this.stockGUI.PRICES_FILE));
+            bw = new BufferedWriter(fw);
+            
+            for (Map.Entry<String, Product> entry: products.entrySet())
+            {
+                String code = entry.getKey();
+                Product product = entry.getValue();
+                
+                String line = code+","+product.getPrice()+"\n";
+                bw.write(line);
+            }            
             bw.close();
             fw.close();
         }
@@ -117,6 +154,7 @@ public class ProductController extends AbstractController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        
     }
     
 }

@@ -287,18 +287,38 @@ public class DialogProduct extends JDialog implements Observable{
     }
     
     public void initActions(){
-        if (this.parent_action.equals("edit"))
+        if (this.parent_action.equals("edit") || this.parent_action.equals("Add stock")
+                || this.parent_action.equals("View"))
         {
-            int rows = stockGUI.getTab_products().getRowCount();
-            int row_target = 0;
-            for (int i=0; i<rows; i++)
-            {
-                boolean is_checked = (boolean) stockGUI.getTab_products().getValueAt(i, 0);
-                if (is_checked){
-                    row_target = i;
-                    break;
+            int row_target = 0;            
+            if (this.parent_action.equals("edit")){
+                int rows = stockGUI.getTab_products().getRowCount();            
+                for (int i=0; i<rows; i++)
+                {
+                    boolean is_checked = (boolean) stockGUI.getTab_products().getValueAt(i, 0);
+                    if (is_checked){
+                        row_target = i;
+                        break;
+                    }
                 }
             }
+            else if (this.parent_action.equals("Add stock") || this.parent_action.equals("View")){
+                row_target = stockGUI.getTab_products().getSelectedRow();
+                
+                if (this.parent_action.equals("Add stock"))
+                {
+                    this.cb_add_stock.setSelected(true);
+                    this.lab_delivery.setEnabled(true);
+                    this.tf_delivery.setEnabled(true);
+
+                    String dev_code = "dev"+Instant.now().toEpochMilli();
+                    this.tf_delivery.setText(dev_code);
+
+                    this.lab_qty.setEnabled(true);
+                    this.tf_qty.setEnabled(true);
+                    this.tf_qty.setEditable(true);
+                }                
+            }            
             
             //if (row_target == 0)
                     
@@ -357,7 +377,7 @@ public class DialogProduct extends JDialog implements Observable{
         HashMap<String, Product> products = prod_records.getProducts();      
         
         if (products.containsKey(prod.getCode())){
-            JOptionPane.showMessageDialog(null, 
+            JOptionPane.showMessageDialog(this, 
                 "Product updated",
                 "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
         }
@@ -381,7 +401,7 @@ public class DialogProduct extends JDialog implements Observable{
             
             if(stock_by_deliv.containsKey(stock.getDelivery())){
                 String error_msg = "The stock delivered already exists !";
-                JOptionPane.showMessageDialog(null, 
+                JOptionPane.showMessageDialog(this, 
                     error_msg, "ERROR", JOptionPane.ERROR_MESSAGE);
             }
             else if(!stock_by_deliv.containsKey(stock.getDelivery()) &&

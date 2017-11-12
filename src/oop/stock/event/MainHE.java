@@ -80,7 +80,7 @@ public class MainHE extends AbstractHandleEvent{
         this.stockGUI.getBtn_delete().addActionListener(
             new ActionListener(){
                 public void actionPerformed(ActionEvent evt){
-                    System.out.println("MainHE > delete action");
+                    btn_deleteActionPerformed(evt);                    
                 }
             }
         );
@@ -124,6 +124,62 @@ public class MainHE extends AbstractHandleEvent{
 //                    ", checkbox val: "+stockGUI.getTab_products().getValueAt(row_id, 0));                    
             }
         });
+    }
+    
+    public void btn_deleteActionPerformed(ActionEvent evt){
+        System.out.println("MainHE > delete action");
+        
+        int rows = stockGUI.getTab_products().getRowCount();
+        int rows_checked = 0;
+        for (int i=0; i<rows; i++)
+        {
+            boolean is_checked = (boolean) stockGUI.getTab_products().getValueAt(i, 0);
+            if (is_checked)rows_checked++;
+        }
+
+        if (rows_checked == 1){
+            int row_target = 0;  
+            for (int i=0; i<rows; i++)
+            {
+                boolean is_checked = (boolean) stockGUI.getTab_products().getValueAt(i, 0);
+                if (is_checked){
+                    row_target = i;
+                    break;
+                }
+            }
+            String prod_code = stockGUI.getTab_products().getValueAt(row_target, 1).toString();
+            
+            ProductRecords prod_records = (ProductRecords) this.prod_controller.getModel();
+            HashMap<String, Product> products = prod_records.getProducts();
+
+            StockRecords stock_records = (StockRecords) this.stock_controller.getModel();
+            HashMap<String,HashMap<String,Stock>> stocks = stock_records.getStocks();
+            
+            if (products.containsKey(prod_code))
+                products.remove(prod_code);
+            
+            if (stocks.containsKey(prod_code))
+                stocks.remove(prod_code);
+            
+            prod_records.setProducts(products);
+            this.prod_controller.setModel(prod_records);
+            this.prod_controller.save_data(this.stockGUI.PRODUCTS_FILE);
+            prod_records.notifyObservers();
+            
+            stock_records.setStocks(stocks);
+            this.stock_controller.setModel(stock_records);
+            this.stock_controller.save_data(this.stockGUI.STOCKS_FILE);
+            stock_records.notifyObservers();
+            
+            JOptionPane.showMessageDialog(this.stockGUI, 
+                "Product deleted",
+                "SUCCESS", JOptionPane.INFORMATION_MESSAGE);
+        }            
+        else {
+            String error_msg = "Please, select only one item to delete";
+            JOptionPane.showMessageDialog(null, 
+                error_msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
     
     public void btn_resetActionPerformed(ActionEvent evt){
@@ -256,14 +312,61 @@ public class MainHE extends AbstractHandleEvent{
 
             if(action == "View")
             {
+                stockGUI.setDialog(new DialogProduct(stockGUI, true, "View"));
                 prod_controller.getModel().notifyObservers();
                 stock_controller.getModel().notifyObservers();
             }
             else if(action == "Add stock"){
-
+                stockGUI.setDialog(new DialogProduct(stockGUI, true, "Add stock"));
+                prod_controller.getModel().notifyObservers();
+                stock_controller.getModel().notifyObservers();
             }
             else if(action == "Buy"){
-
+                ProductRecords prod_records = (ProductRecords) this.prod_controller.getModel(); 
+                HashMap<String,Product> products = prod_records.getProducts();
+                String prod_code = stockGUI.getTab_products().getValueAt(row_id, 1).toString();
+                Product prod = products.get(prod_code);
+                
+                StockRecords stock_records = (StockRecords) this.stock_controller.getModel();
+                HashMap<String,HashMap<String,Stock>> stocks = stock_records.getStocks();
+                HashMap<String, Stock> stock_by_deliv = stocks.get(prod_code);
+                
+                int prod_qty = 0;
+                String deliv_to_del = "";
+                for (Map.Entry<String, Stock> sub_entry: stock_by_deliv.entrySet())
+                {
+                    String delivery = sub_entry.getKey();
+                    Stock stock = sub_entry.getValue();
+                    int qty = stock.getQuantity();
+                    prod_qty += qty;
+                    
+                    if(qty == 0)
+                        deliv_to_del = delivery; // remove empty delivery
+                    else if (qty > 0)
+                    {
+                        qty--;
+                        stock.setQuantity(qty);
+                        break;
+                    }
+                }
+                
+                if(!deliv_to_del.equals(""))
+                    stock_by_deliv.remove(deliv_to_del);
+                
+                if(prod_qty == 0)
+                {
+                    String error_msg = "Sorry, there are no more products to buy";
+                    JOptionPane.showMessageDialog(this.stockGUI, 
+                        error_msg, "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                
+                stocks.put(prod_code, stock_by_deliv);
+                stock_records.setStocks(stocks);
+                stock_controller.setModel(stock_records);
+                stock_controller.save_data(this.stockGUI.STOCKS_FILE);
+                
+                prod_controller.getModel().notifyObservers();
+                stock_controller.getModel().notifyObservers();
             }
         }
 

@@ -405,7 +405,7 @@ public class StockGUI extends JFrame implements Observer{
                 {
                     this.tab_products.setValueAt(prod_qty, target_row, 4);
                 }
-                else System.out.println("StockGUI >> missing prod_code from stock");                
+                else System.out.println("StockGUI >> from stock, missing prod_code: "+prod_code);                
             }
         }
         else{
